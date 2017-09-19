@@ -16,7 +16,7 @@ export default {
         },
         setting: {
             type: Object,
-            default: function(){ 
+            default: function(){
                 return tinymceSetting;
             }
         }
@@ -59,7 +59,7 @@ export default {
                     this.editor = editor;
                     editor.on('init', ()=>{
                         editor.setContent(this.value || this.backup);
-                        editor.on('input change undo redo', ()=>{
+                        editor.on('input change undo redo keyup', ()=>{
                             if(this.status === INPUT || this.status === INIT) return this.status = CHANGED;
                             this.$emit('input', editor.getContent());
                         });
