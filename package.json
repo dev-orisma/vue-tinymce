@@ -12,9 +12,9 @@
     "url": "git+https://github.com/lpreterite/vue-tinymce.git"
   },
   "keywords": [
-      "tinymce",
-      "vue",
-      "textarea"
+    "tinymce",
+    "vue",
+    "textarea"
   ],
   "author": "packy-tang <lpreterite@126.com>",
   "license": "MIT",
