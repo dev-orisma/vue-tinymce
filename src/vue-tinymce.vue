@@ -1,9 +1,7 @@
 <script>
-
 const INIT = 0;
 const INPUT = 1;
 const CHANGED = 2;
-
 export default {
     props: {
         value: {
@@ -36,14 +34,12 @@ export default {
             backup: ''
         }
     },
-    watch:{
+    watch: {
         value(val){
-            if(this.status === CHANGED || this.status === INIT) return this.status = INPUT;
-            if(tinymce.get(this.id).initialized){
-                tinymce.get(this.id).setContent(val);
-            }else{
-                this.backup = val;
-            }
+            // console.log('value change', val, this.status);
+            if(this.status === CHANGED) return this.status = INPUT;
+            if(!this.editor || !this.editor.initialized) return; // fix editor plugin is loading and set content will throw error.
+            this.editor.setContent(val);
         }
     },
     created(){
@@ -57,21 +53,27 @@ export default {
                 setup: (editor)=> {
                     this.setup(editor);
                     this.editor = editor;
+                    // console.log('setup');
                     editor.on('init', ()=>{
-                        editor.setContent(this.value || this.backup);
-                        editor.on('input change undo redo keyup', ()=>{
+                        // console.log('init', this.value);
+                        editor.setContent(this.value);
+                        var _this = this
+                        //fix execCommand not change ,more see issues#2
+                        editor.on('input change undo redo execCommand keyup', ()=>{
                             if(this.status === INPUT || this.status === INIT) return this.status = CHANGED;
-                            this.$emit('input', editor.getContent());
+                        	_this.$emit('input', editor.getContent());
                         });
+                        setInterval(function(){
+                        	_this.$emit('input', editor.getContent());
+                        },1000)
                     });
                 }
             }
         );
-
         tinymce.init(setting);
     },
     beforeDestroy: function(){
-        tinymce.get(this.id).remove();
+        this.editor.remove();
     }
 }
 </script>
