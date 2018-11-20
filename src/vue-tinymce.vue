@@ -71,11 +71,9 @@ export default {
                     editor.on('keydown', function(event) {
 				        if (event.keyCode == 9) { // tab pressed
 				          if (event.shiftKey) {
-				          	console.log(111)
 				            editor.execCommand('Outdent');
 				          }
 				          else {
-				          	console.log(222)
 				            editor.execCommand('Indent');
 				          }
 
